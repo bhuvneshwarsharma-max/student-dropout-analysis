@@ -1,0 +1,34 @@
+import numpy as np
+import pandas as pd
+import joblib
+
+# Load the trained model
+model = joblib.load("dropout_model.pkl")  # Ensure you have a trained model saved as dropout_model.pkl
+
+# Function to take user input and predict dropout risk
+def predict_dropout():
+    print("\n=== Student Dropout Prediction System ===\n")
+    
+    # Take input for student attributes
+    attendance = float(input("Enter attendance percentage (0-100): "))
+    gpa = float(input("Enter GPA (0.0 - 4.0): "))
+    financial_status = int(input("Financial status (1: Low, 2: Medium, 3: High): "))
+    parental_education = int(input("Parental education level (1-5): "))
+    extracurricular = int(input("Participates in extracurricular activities? (1: Yes, 0: No): "))
+    
+    # Create a feature array (modify this based on your actual dataset features)
+    student_data = np.array([[attendance, gpa, financial_status, parental_education, extracurricular]])
+    
+    # Predict using the loaded model
+    prediction = model.predict(student_data)
+    probability = model.predict_proba(student_data)[0][1]  # Probability of dropout
+    
+    # Display result
+    if prediction[0] == 1:
+        print(f"\n⚠️ High Risk! Dropout Probability: {probability:.2f}")
+    else:
+        print(f"\n✅ Low Risk! Dropout Probability: {probability:.2f}")
+
+# Run the program
+if __name__ == "__main__":
+    predict_dropout()
